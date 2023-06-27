@@ -4,16 +4,15 @@ import os
 import math
 import sys
 import datetime
-# Список имен файлов
-fig = plt.figure("image")
 
+fig = plt.figure("image")
 sdate = sys.argv[1] #%d-%m-%Y
 time = sys.argv[2] #%H:%M
 filterid = sys.argv[3]
 sdated = datetime.datetime.strptime(sdate + ' ' + time,'%d-%m-%Y %H:%M')
 sdatet = sdated.strftime('%y%m%d')
 
-# Получаем список имен файлов в заданной папке
+# Getting a list of file names in a given folder
 path = "path" +"/" + sdatet
 files = []
 fdates = []
@@ -41,24 +40,24 @@ group1 = images[:2]
 group2 = images[3:5]
 group3 = images[6:8]
 
-# Считаем суммы изображений
+# Counting the sums of images
 sum1 = np.sum(group1, axis=0) / len(group1)
 sum2 = np.sum(group2, axis=0) / len(group2)
 sum3 = np.sum(group3, axis=0) / len(group3)
 
-# Считаем разности изображений
+# Counting image differences
 diff1 = sum2 - sum1
 diff2 = sum3 - sum2
 diff = diff2 - diff1
 #ce3 = r"path"
 
-# Вычисляем 2D- преобразование Фурье суммы изображений
+# Calculate the 2D Fourier transform of the sum of images
 fft_sum_images = np.fft.fft2(sum3)
 
-# Вычисляем логарифмированный амплитудный спектр
+# Calculate the logarithmic amplitude spectrum
 spectrum = np.log(np.abs(np.fft.fftshift(fft_sum_images)))
 
-# Рисуем изображения
+# Draw images
 figline = plt.figure("Intencity through line")
 axline = figline.add_subplot(1, 1, 1)
 fig, axs = plt.subplots(2, 3, figsize=(10, 8))
@@ -73,7 +72,7 @@ axs[1, 0].set_title("diff1")
 axs[1, 1].pcolormesh(diff2, vmin=0, vmax=50)
 axs[1, 1].set_title("diff2")
 
-## Функция для расчета экспоненциальной бегущей средней
+# Function for calculating exponential running average
 def exp_running_avg(data, alpha):
   r_avg = [data[0]]
   for i in range(1, len(data)):
@@ -81,11 +80,11 @@ def exp_running_avg(data, alpha):
   return np.array(r_avg)
 
 
-# Выводим логарифмированный амплитудный спектр
+# Output the logarithmic amplitude spectrum
 axs[1, 2].pcolormesh(diff, cmap="gray", vmin=0, vmax=50)
 axs[1, 2].set_title("diff")
 
-# Объявляем переменные для хранения текущих координат точек и списка уже нарисованных отрезков
+# Declare variables to store the current coordinates of points and a list of already drawn segments
 current_point = None
 previous_point = None
 lines = []
@@ -123,7 +122,7 @@ def onclick(event):
             for i in range(len(x)):
                 l.append(math.pow((x[i]-x[0])*(x[i]-x[0]) + (y[i]-y[0])*(y[i]-y[0]),0.5))
                 I.append(diff[round(y[i]),round(x[i])])
-            # Применяем к I экспоненциальную бегущую среднюю с коэффициентом alpha = 0.1
+            # We apply an exponential running average with a coefficient alpha = 0.1 to I
             I = exp_running_avg(I, 0.1)
 
             h = 100
@@ -151,7 +150,7 @@ def onclick(event):
 
     return current_point, previous_point
 
-# Связываем функцию-обработчик с событием нажатия кнопки мыши
+# Linking the handler function to the mouse button click event
 fig.canvas.mpl_connect('button_press_event', onclick)
 
 plt.show()
