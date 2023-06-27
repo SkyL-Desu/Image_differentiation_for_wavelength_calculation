@@ -14,7 +14,7 @@ sdated = datetime.datetime.strptime(sdate + ' ' + time,'%d-%m-%Y %H:%M')
 sdatet = sdated.strftime('%y%m%d')
 
 # Получаем список имен файлов в заданной папке
-path = "C:/Users/agey1/OneDrive/Рабочий стол" +"/" + sdatet
+path = "path" +"/" + sdatet
 files = []
 fdates = []
 
@@ -50,7 +50,7 @@ sum3 = np.sum(group3, axis=0) / len(group3)
 diff1 = sum2 - sum1
 diff2 = sum3 - sum2
 diff = diff2 - diff1
-#ce3 = r"C:\Users\agey1\OneDrive\Рабочий стол\221215\CE3_221215120120_0001.TIF"
+#ce3 = r"path"
 
 # Вычисляем 2D- преобразование Фурье суммы изображений
 fft_sum_images = np.fft.fft2(sum3)
